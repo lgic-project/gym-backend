@@ -21,7 +21,7 @@ class SuscriptionsController extends Controller
      */
     public function create()
     {
-        //
+        return view('suscriptions.create');
     }
 
     /**
@@ -29,31 +29,49 @@ class SuscriptionsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:suscriptions',
+            // add other validation rules as needed
+        ]);
+
+        $suscription = Suscription::create($request->all());
+
+        return redirect()->route('suscriptions.index')
+                         ->with('success', 'Subscription created successfully.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Suscription $suscription)
     {
-        //
+        return view('suscriptions.show', compact('suscription'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Suscription $suscription)
     {
-        //
+        return view('suscriptions.edit', compact('suscription'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Suscription $suscription)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:suscriptions,email,' . $suscription->id,
+            // add other validation rules as needed
+        ]);
+
+        $suscription->update($request->all());
+
+        return redirect()->route('suscriptions.index')
+                         ->with('success', 'Subscription updated successfully.');
     }
 
     /**
@@ -62,6 +80,8 @@ class SuscriptionsController extends Controller
     public function destroy(Suscription $suscription)
     {
         $suscription->delete();
-        return redirect()->back();
+
+        return redirect()->back()
+                         ->with('success', 'Subscription deleted successfully.');
     }
 }
