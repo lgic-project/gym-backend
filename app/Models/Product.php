@@ -24,7 +24,14 @@ class Product extends Model implements HasMedia
         return asset('images/default-product.png');
     }
 
-
+ // Use the HasFactory trait to enable factory support for this model
+  // Use the HasFactory trait to enable factory support for this model
+   // Use the HasFactory trait to enable factory support for this model
+    // Use the HasFactory trait to enable factory support for this model
+     // Use the HasFactory trait to enable factory support for this model
+      // Use the HasFactory trait to enable factory support for this model
+       // Use the HasFactory trait to enable factory support for this model
+        // Use the HasFactory trait to enable factory support for this model
     public function scopeSearch($query, $request)
     {
         if ($request->has('search') && $request->search !== null) {

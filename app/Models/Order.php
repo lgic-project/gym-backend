@@ -15,7 +15,7 @@ class Order extends Model
     // Protect the 'id' attribute from mass assignment
     protected $guarded = ['id'];
 
-    // Define a query scope to filter orders based on the authenticated API user
+    // Define a query scope to filter ordesssssssssssssssssssssrs based on the authenticated API user
     public function scopeSearch($query)
     {
         // Check if there is an authenticated API user
