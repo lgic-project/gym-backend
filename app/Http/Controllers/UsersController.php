@@ -38,25 +38,25 @@ class UsersController extends Controller
     public function store(Request $request)
     {
         // Validate the incoming request data
-        $sanitized = $request->validate([
-            'name' => 'required',
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:8',
-            'user_role' => 'required',
+            'password' => 'required|string|min:8',
+            'user_role' => 'required|string',
             'photo' => 'required|image',
-            'description' => 'nullable',
+            'description' => 'nullable|string',
             'cost_per_month' => 'nullable|numeric',
-            'experience' => 'nullable'
+            'experience' => 'nullable|string'
         ]);
 
         // Hash the password before storing it
-        $sanitized['password'] = Hash::make($sanitized['password']);
+        $validatedData['password'] = Hash::make($validatedData['password']);
 
-        // Create a new user with the sanitized data
-        $user = User::create($sanitized);
+        // Create a new user with the validated data
+        $user = User::create($validatedData);
 
         // Associate the photo with the user
-        $user->addMedia($sanitized['photo'])->toMediaCollection();
+        $user->addMedia($request->file('photo'))->toMediaCollection();
 
         // Redirect to the users index page
         return redirect()->route('users.index');
@@ -88,22 +88,22 @@ class UsersController extends Controller
     public function update(Request $request, User $user)
     {
         // Validate the incoming request data
-        $sanitized = $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email,'.$user->id,
-            'user_role' => 'required',
-            'description' => 'nullable',
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'user_role' => 'required|string',
+            'description' => 'nullable|string',
             'cost_per_month' => 'nullable|numeric',
-            'experience' => 'nullable'
+            'experience' => 'nullable|string'
         ]);
 
         // Hash the password if it is provided and not null
         if ($request->filled('password')) {
-            $sanitized['password'] = Hash::make($request->password);
+            $validatedData['password'] = Hash::make($request->password);
         }
 
-        // Update the user's data with the sanitized data
-        $user->update($sanitized);
+        // Update the user's data with the validated data
+        $user->update($validatedData);
 
         // Update the user's media (photo) if a new one is provided
         if ($request->hasFile('photo')) {
