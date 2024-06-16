@@ -17,8 +17,7 @@ class ProductsController extends Controller
     }
 
     /**
-     * Show the form for creating a  ......................new resource   ....................    modify for image 
-     * .
+     * Show the form for creating a new resource.
      */
     public function create()
     {
@@ -31,18 +30,24 @@ class ProductsController extends Controller
     public function store(Request $request)
     {
         $sanitized = $request->validate([
-            'name' => 'required',
-            'description' => 'required',
-            'price' => 'required',
-            'image' => 'required'
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'price' => 'required|numeric',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
         $product = Product::create($sanitized);
 
         if ($request->hasFile('image')) {
-            $product->addMedia($request->file('image'))->toMediaCollection();
+            try {
+                $product->addMedia($request->file('image'))->toMediaCollection();
+            } catch (\Exception $e) {
+                // Handle error if file upload fails
+                return redirect()->back()->withErrors(['image' => 'Failed to upload image.']);
+            }
         }
-        return redirect()->route('products.index');
+
+        return redirect()->route('products.index')->with('success', 'Product created successfully.');
     }
 
     /**
@@ -50,7 +55,7 @@ class ProductsController extends Controller
      */
     public function show(string $id)
     {
-        //
+        // Currently not implemented
     }
 
     /**
@@ -67,19 +72,25 @@ class ProductsController extends Controller
     public function update(Request $request, Product $product)
     {
         $sanitized = $request->validate([
-            'name' => 'required',
-            'description' => 'required',
-            'price' => 'required'
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'price' => 'required|numeric',
+            'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
         $product->update($sanitized);
 
         if ($request->hasFile('image')) {
-            $product->clearMediaCollection();
-            $product->addMedia($request->file('image'))->toMediaCollection();
+            try {
+                $product->clearMediaCollection();
+                $product->addMedia($request->file('image'))->toMediaCollection();
+            } catch (\Exception $e) {
+                // Handle error if file upload fails
+                return redirect()->back()->withErrors(['image' => 'Failed to upload image.']);
+            }
         }
 
-        return redirect()->route('products.index');
+        return redirect()->route('products.index')->with('success', 'Product updated successfully.');
     }
 
     /**
@@ -87,7 +98,13 @@ class ProductsController extends Controller
      */
     public function destroy(Product $product)
     {
-        $product->delete();
-        return redirect()->back();
+        try {
+            $product->delete();
+        } catch (\Exception $e) {
+            // Handle error if deletion fails
+            return redirect()->back()->withErrors(['product' => 'Failed to delete product.']);
+        }
+        
+        return redirect()->back()->with('success', 'Product deleted successfully.');
     }
 }
