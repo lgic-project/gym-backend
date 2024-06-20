@@ -105,7 +105,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Get authenticated user's profile.
+     *
      */
     public function profile()
     {
