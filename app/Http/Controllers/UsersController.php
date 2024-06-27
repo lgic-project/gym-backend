@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class UsersController extends Controller
 {
@@ -64,11 +65,12 @@ class UsersController extends Controller
 
     /**
      * Display the specified resource.
-     * (Currently not implemented)
+     * Retrieves and returns the view for a specific user.
      */
-    public function show(string $id)
+    public function show(User $user)
     {
-        // Placeholder for displaying a specific user
+        // Return the view to show a specific user
+        return view('users.show', compact('user'));
     }
 
     /**
