@@ -11,7 +11,10 @@ class UsersController extends Controller
 {
     /**
      * Display a listing of the resource.
+     *
      * Retrieves a paginated list of users and passes it to the 'users.index' view.
+     *
+     * @return \Illuminate\View\View
      */
     public function index()
     {
@@ -24,7 +27,10 @@ class UsersController extends Controller
 
     /**
      * Show the form for creating a new resource.
+     *
      * Returns the view for creating a new user.
+     *
+     * @return \Illuminate\View\View
      */
     public function create()
     {
@@ -34,7 +40,11 @@ class UsersController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     *
      * Validates the request, hashes the password, creates a new user, and associates a media file (photo) with the user.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
@@ -65,7 +75,11 @@ class UsersController extends Controller
 
     /**
      * Display the specified resource.
+     *
      * Retrieves and returns the view for a specific user.
+     *
+     * @param  \App\Models\User  $user
+     * @return \Illuminate\View\View
      */
     public function show(User $user)
     {
@@ -75,7 +89,11 @@ class UsersController extends Controller
 
     /**
      * Show the form for editing the specified resource.
+     *
      * Returns the view for editing an existing user.
+     *
+     * @param  \App\Models\User  $user
+     * @return \Illuminate\View\View
      */
     public function edit(User $user)
     {
@@ -85,7 +103,12 @@ class UsersController extends Controller
 
     /**
      * Update the specified resource in storage.
+     *
      * Validates the request, updates the user's data, hashes the password if provided, and updates the user's media (photo) if necessary.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\User  $user
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, User $user)
     {
@@ -119,7 +142,11 @@ class UsersController extends Controller
 
     /**
      * Remove the specified resource from storage.
+     *
      * Deletes a user and redirects to the users index page.
+     *
+     * @param  \App\Models\User  $user
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(User $user)
     {
